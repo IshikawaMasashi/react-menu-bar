@@ -10,7 +10,6 @@ import {
   useState
 } from "react";
 import MenuBarEvents from "./MenuBarEvents";
-import usePrevious from "../hooks/usePrevious";
 
 // var MenuBarEvents = require("./MenuBarEvents");
 // var cloneWithProps = React.addons.cloneWithProps;
@@ -21,36 +20,19 @@ type Props = { onSelect: (command: string) => void; children: ReactNode };
 export default function MenuBar(props: Props) {
   const elementRef = useRef<HTMLDivElement>(null);
   const [isActive, setIsActive] = useState(false);
-  const prevIsActive = usePrevious(isActive);
+  // const prevIsActive = usePrevious(isActive);
   const [events] = useState(new MenuBarEvents());
-  // propTypes: {
-  //   onSelect: React.PropTypes.func.isRequired
-  // },
-
-  // constructor(props: Props) {
-  //   super(props);
-
-  //   this.state = {
-  //     isActive: false
-  //   };
-  // }
-
-  // getInitialState = () => {
-  //   return {
-  //     isActive: false
-  //   };
-  // };
 
   useEffect(() => {
     return () => {};
   }, []);
 
   useEffect(() => {
-    if (isActive && !prevIsActive) {
+    if (isActive) {
       bindSetInactiveHandler();
-    } else if (prevIsActive && !isActive) {
-      unbindSetInactiveHandler();
+      return;
     }
+    unbindSetInactiveHandler();
     return () => {};
   }, [isActive]);
 

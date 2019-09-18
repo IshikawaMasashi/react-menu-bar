@@ -1,7 +1,15 @@
-import React, { ReactElement, ReactNode } from "react";
+import React from "react";
 
-import { cloneElement, useRef, useState, useEffect } from "react";
-import usePrevious from "../hooks/usePrevious";
+import {
+  cloneElement,
+  useRef,
+  ReactNode,
+  useState,
+  useEffect,
+  useCallback,
+  ReactElement
+} from "react";
+// import usePrevious from "../hooks/usePrevious";
 
 type Props = {
   isMenuBarActive?: boolean;
@@ -24,7 +32,7 @@ export default function MenuItem(props: Props) {
   const elementRef = useRef<HTMLDivElement>(null);
 
   const [open, setOpen] = useState(false);
-  const prevOpen = usePrevious(open);
+  // const prevOpen = usePrevious(open);
   // constructor(props: any) {
   //   super(props);
 
@@ -42,14 +50,14 @@ export default function MenuItem(props: Props) {
     return () => {
       unbindCloseHandlers();
     };
-  });
+  }, []);
 
   useEffect(() => {
-    if (open && !prevOpen) {
+    if (open) {
       bindCloseHandlers();
-    } else if (!open && prevOpen) {
-      unbindCloseHandlers();
+      return;
     }
+    unbindCloseHandlers();
   }, [open]);
   // componentDidUpdate(prevProps: any, prevState: any) {
   //   if (this.state.open && !prevState.open) {
@@ -137,20 +145,41 @@ export default function MenuItem(props: Props) {
     props.menuBarEvents.removeMouseOverListener(onMenuBarMouseOver);
   };
 
-  const onDocumentClick = (e: MouseEvent) => {
-    if (!isChildElement(e.target)) {
-      // setState({ open: false });
-      setOpen(false);
-    }
-  };
+  // const onDocumentClick = (e: MouseEvent) => {
+  //   if (!isChildElement(e.target)) {
+  //     // setState({ open: false });
+  //     setOpen(false);
+  //   }
+  // };
 
-  const onMenuBarMouseOver = (e: React.MouseEvent) => {
-    e.persist();
-    if (!isChildElement(e.target)) {
-      // setState({ open: false });
-      setOpen(false);
-    }
-  };
+  const onDocumentClick = useCallback(
+    (e: MouseEvent) => {
+      if (!isChildElement(e.target)) {
+        // setState({ open: false });
+        setOpen(false);
+      }
+    },
+    [setOpen]
+  );
+
+  // const onMenuBarMouseOver = (e: React.MouseEvent) => {
+  //   e.persist();
+  //   if (!isChildElement(e.target)) {
+  //     // setState({ open: false });
+  //     setOpen(false);
+  //   }
+  // };
+
+  const onMenuBarMouseOver = useCallback(
+    (e: React.MouseEvent) => {
+      e.persist();
+      if (!isChildElement(e.target)) {
+        // setState({ open: false });
+        setOpen(false);
+      }
+    },
+    [setOpen]
+  );
 
   const isChildElement = (element: any) => {
     // return this.getDOMNode().contains(element);
