@@ -1,7 +1,18 @@
 import React, { ReactElement } from "react";
+
 import { cloneElement } from "react";
 
-export default class MenuItem extends React.Component<any, any> {
+type Props = {
+  isMenuBarActive: boolean;
+  isMenuBarDescendant: any;
+  menuBarEvents: any;
+  onSelect: any;
+  label?: string;
+  command: any;
+  isTopLevel: boolean;
+};
+
+export default class MenuItem extends React.Component<Props, any> {
   //   propTypes: {
   //     isMenuBarActive: React.PropTypes.bool,
   //     isMenuBarDescendant: React.PropTypes.func.isRequired,
