@@ -9,7 +9,6 @@ import {
   useCallback,
   ReactElement
 } from "react";
-// import usePrevious from "../hooks/usePrevious";
 
 type Props = {
   isMenuBarActive?: boolean;
@@ -20,7 +19,27 @@ type Props = {
   command?: any;
   isTopLevel?: boolean;
   children: ReactNode;
+  shortcut?: string;
 };
+
+function TreeCollapsedDark() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M10.0719 7.99999L5.71461 12.3573L6.33333 12.976L11 8.30935V7.69064L6.33333 3.02397L5.71461 3.64269L10.0719 7.99999Z"
+        fill="#C5C5C5"
+      />
+    </svg>
+  );
+}
 
 export default function MenuItem(props: Props) {
   //   propTypes: {
@@ -73,6 +92,30 @@ export default function MenuItem(props: Props) {
 
   const getLabel = () => {
     return hasSubmenu() ? props.label : props.children;
+    // if (hasSubmenu()) {
+    //   return (
+    //     <div className={"container"}>
+    //       <div></div>
+    //       <div>{props.label}</div>
+    //     </div>
+    //   );
+    // }
+
+    // return props.children;
+  };
+
+  const getShortcut = () => {
+    // return props.shortcut;
+
+    return hasSubmenu() ? (
+      !props.isTopLevel && (
+        <div style={{ display: "flex" }}>
+          <TreeCollapsedDark></TreeCollapsedDark>
+        </div>
+      )
+    ) : (
+      <div>{props.shortcut}</div>
+    );
   };
 
   const hasSubmenu = () => {
@@ -212,6 +255,7 @@ export default function MenuItem(props: Props) {
         onClick={onClick}
       >
         {getLabel()}
+        {getShortcut()}
       </div>
       {renderSubmenu()}
     </div>

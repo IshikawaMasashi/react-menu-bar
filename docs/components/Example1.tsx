@@ -13,7 +13,9 @@ function Example1() {
     <MenuBar onSelect={onSelect}>
       <MenuItem label="File">
         <Menu>
-          <MenuItem command="new-window">New Window</MenuItem>
+          <MenuItem command="new-window" shortcut={"Ctrl+N"}>
+            New Window
+          </MenuItem>
           <MenuItem command="new-file">New File</MenuItem>
         </Menu>
       </MenuItem>
