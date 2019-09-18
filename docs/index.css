@@ -1,0 +1,91 @@
+:root {
+  --display-border: 1px solid red;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+canvas {
+  border: var(--display-border);
+}
+
+table.grid {
+  width: 200px;
+  border: var(--display-border);
+}
+
+table.grid tr {
+  height: 15px;
+}
+
+table.grid td {
+  border: 1px solid #000000;
+}
+
+table.grid td:hover {
+  background: red;
+}
+
+main {
+  max-width: 1180px;
+  margin: auto;
+}
+
+.boxes-container{
+    display: flex;
+}
+
+.box {
+  border: var(--display-border);
+  background-color: blue;
+  width: 200px;
+  height: 200px;
+  color: white;
+  text-align: center;
+}
+
+
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  -webkit-border-radius: 0 6px 6px 6px;
+  -moz-border-radius: 0 6px 6px 6px;
+  border-radius: 0 6px 6px 6px;
+}
+
+.dropdown-submenu > a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+
+.dropdown-submenu:hover > a:after {
+  border-left-color: #ffffff;
+}
+
+.dropdown-submenu.pull-left {
+  float: none;
+}
+
+.dropdown-submenu.pull-left > .dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  -webkit-border-radius: 6px 0 6px 6px;
+  -moz-border-radius: 6px 0 6px 6px;
+  border-radius: 6px 0 6px 6px;
+}
