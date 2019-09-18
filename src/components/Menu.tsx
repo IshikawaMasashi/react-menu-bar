@@ -4,9 +4,9 @@ import { cloneElement } from "react";
 // var cloneWithProps = React.addons.cloneWithProps;
 
 type Props = {
-  isMenuBarDescendant: any;
-  menuBarEvents: any;
-  onSelect: any;
+  isMenuBarDescendant?: any;
+  menuBarEvents?: any;
+  onSelect?: any;
 };
 export default class Menu extends React.Component<Props, any> {
   // propTypes: {

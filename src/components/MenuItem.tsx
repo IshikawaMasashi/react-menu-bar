@@ -1,168 +1,189 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, ReactNode } from "react";
 
-import { cloneElement } from "react";
+import { cloneElement, useRef, useState, useEffect } from "react";
 
 type Props = {
-  isMenuBarActive: boolean;
-  isMenuBarDescendant: any;
-  menuBarEvents: any;
-  onSelect: any;
+  isMenuBarActive?: boolean;
+  isMenuBarDescendant?: any;
+  menuBarEvents?: any;
+  onSelect?: any;
   label?: string;
-  command: any;
-  isTopLevel: boolean;
+  command?: any;
+  isTopLevel?: boolean;
+  children: ReactNode;
 };
 
-export default class MenuItem extends React.Component<Props, any> {
+export default function MenuItem(props: Props) {
   //   propTypes: {
   //     isMenuBarActive: React.PropTypes.bool,
   //     isMenuBarDescendant: React.PropTypes.func.isRequired,
   //     menuBarEvents: React.PropTypes.object.isRequired,
   //     onSelect: React.PropTypes.func
   //   },
-  element: HTMLElement | null = null;
+  const elementRef = useRef<HTMLDivElement>(null);
 
-  constructor(props: any) {
-    super(props);
+  const [open, setOpen] = useState(false);
+  // constructor(props: any) {
+  //   super(props);
 
-    this.state = {
-      open: false
-    };
-  }
+  //   this.state = {
+  //     open: false
+  //   };
+  // }
 
   // getInitialState = () => {
   //   return {
   //     open: false
   //   };
   // };
+  useEffect(() => {
+    return () => {
+      unbindCloseHandlers();
+    };
+  }, []);
 
-  componentDidUpdate(prevProps: any, prevState: any) {
-    if (this.state.open && !prevState.open) {
-      this.bindCloseHandlers();
-    } else if (prevState.open && !this.state.open) {
-      this.unbindCloseHandlers();
+  useEffect(() => {
+    if (open) {
+      bindCloseHandlers();
+    } else if (!open) {
+      unbindCloseHandlers();
     }
-  }
+  }, [open]);
+  // componentDidUpdate(prevProps: any, prevState: any) {
+  //   if (this.state.open && !prevState.open) {
+  //     this.bindCloseHandlers();
+  //   } else if (prevState.open && !this.state.open) {
+  //     this.unbindCloseHandlers();
+  //   }
+  // }
 
-  componentWillUnmount() {
-    this.unbindCloseHandlers();
-  }
+  // componentWillUnmount() {
+  //   this.unbindCloseHandlers();
+  // }
 
-  getLabel = () => {
-    return this.hasSubmenu() ? this.props.label : this.props.children;
+  const getLabel = () => {
+    return hasSubmenu() ? props.label : props.children;
   };
 
-  hasSubmenu = () => {
-    return React.isValidElement(this.props.children);
+  const hasSubmenu = () => {
+    return React.isValidElement(props.children);
   };
 
-  renderSubmenu = () => {
-    if (!this.hasSubmenu()) return;
+  const renderSubmenu = () => {
+    if (!hasSubmenu()) return;
 
-    var menu = this.props.children as ReactElement;
+    var menu = props.children as ReactElement;
 
     return cloneElement(menu, {
-      isMenuBarDescendant: this.props.isMenuBarDescendant,
-      menuBarEvents: this.props.menuBarEvents,
-      onSelect: this.onSelect
+      isMenuBarDescendant: props.isMenuBarDescendant,
+      menuBarEvents: props.menuBarEvents,
+      onSelect: onSelect
     });
   };
 
-  onSelect = (key: any) => {
-    this.props.onSelect(key);
-    this.setState({ open: false });
+  const onSelect = (key: any) => {
+    props.onSelect(key);
+    // setState({ open: false });
+    setOpen(false);
   };
 
-  onClick = (e: any) => {
+  const onClick = (e: any) => {
     e.preventDefault();
 
-    if (this.hasSubmenu()) {
-      this.toggleOpen();
+    if (hasSubmenu()) {
+      toggleOpen();
     } else {
-      this.props.onSelect(this.props.command);
+      props.onSelect(props.command);
     }
   };
 
-  onMouseOver = (e: any) => {
-    if (this.props.isTopLevel && this.props.isMenuBarActive) {
-      this.setState({ open: true });
+  const onMouseOver = (e: any) => {
+    if (props.isTopLevel && props.isMenuBarActive) {
+      // setState({ open: true });
+      setOpen(true);
     }
 
-    if (!this.props.isTopLevel && this.hasSubmenu()) {
-      this.setState({ open: true });
+    if (!props.isTopLevel && hasSubmenu()) {
+      // setState({ open: true });
+      setOpen(true);
     }
   };
 
-  onMouseOut = (e: any) => {
+  const onMouseOut = (e: any) => {
     if (
-      this.hasSubmenu() &&
-      this.props.isMenuBarDescendant(e.relatedTarget) &&
-      !this.isChildElement(e.relatedTarget)
+      hasSubmenu() &&
+      props.isMenuBarDescendant(e.relatedTarget) &&
+      !isChildElement(e.relatedTarget)
     ) {
-      this.setState({ open: false });
+      // setState({ open: false });
+      setOpen(false);
     }
   };
 
-  toggleOpen = () => {
-    this.setState({ open: !this.state.open });
+  const toggleOpen = () => {
+    // setState({ open: !state.open });
+    setOpen(!open);
   };
 
-  bindCloseHandlers = () => {
-    document.addEventListener("click", this.onDocumentClick, false);
-    this.props.menuBarEvents.addMouseOverListener(this.onMenuBarMouseOver);
+  const bindCloseHandlers = () => {
+    document.addEventListener("click", onDocumentClick, false);
+    props.menuBarEvents.addMouseOverListener(onMenuBarMouseOver);
   };
 
-  unbindCloseHandlers = () => {
-    document.removeEventListener("click", this.onDocumentClick);
-    this.props.menuBarEvents.removeMouseOverListener(this.onMenuBarMouseOver);
+  const unbindCloseHandlers = () => {
+    document.removeEventListener("click", onDocumentClick);
+    props.menuBarEvents.removeMouseOverListener(onMenuBarMouseOver);
   };
 
-  onDocumentClick = (e: any) => {
-    if (!this.isChildElement(e.target)) {
-      this.setState({ open: false });
+  const onDocumentClick = (e: any) => {
+    if (!isChildElement(e.target)) {
+      // setState({ open: false });
+      setOpen(false);
     }
   };
 
-  onMenuBarMouseOver = (e: React.MouseEvent) => {
+  const onMenuBarMouseOver = (e: React.MouseEvent) => {
     e.persist();
-    if (!this.isChildElement(e.target)) {
-      this.setState({ open: false });
+    if (!isChildElement(e.target)) {
+      // setState({ open: false });
+      setOpen(false);
     }
   };
 
-  isChildElement = (element: any) => {
+  const isChildElement = (element: any) => {
     // return this.getDOMNode().contains(element);
-    return this.element!.contains(element);
+    return elementRef.current!.contains(element);
   };
 
-  render() {
-    // var classes = {
-    //   open: this.state.open,
-    //   "dropdown-submenu": !this.props.isTopLevel && this.hasSubmenu()
-    // };
-    let classes = "";
-    if (this.state.open) {
-      classes += " open";
-    }
-
-    if (!this.props.isTopLevel && this.hasSubmenu()) {
-      classes += " dropdown-submenu";
-    }
-
-    return (
-      <div
-        className={classes}
-        onMouseOver={this.onMouseOver}
-        onMouseOut={this.onMouseOut}
-        ref={ref => (this.element = ref)}
-      >
-        <div
-          className={this.hasSubmenu() ? "submenu-label" : "menu-item-label"}
-          onClick={this.onClick}
-        >
-          {this.getLabel()}
-        </div>
-        {this.renderSubmenu()}
-      </div>
-    );
+  // render() {
+  // var classes = {
+  //   open: this.state.open,
+  //   "dropdown-submenu": !this.props.isTopLevel && this.hasSubmenu()
+  // };
+  let classes = "";
+  if (open) {
+    classes += " open";
   }
+
+  if (!props.isTopLevel && hasSubmenu()) {
+    classes += " dropdown-submenu";
+  }
+
+  return (
+    <div
+      className={classes}
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}
+      ref={elementRef}
+    >
+      <div
+        className={hasSubmenu() ? "submenu-label" : "menu-item-label"}
+        onClick={onClick}
+      >
+        {getLabel()}
+      </div>
+      {renderSubmenu()}
+    </div>
+  );
+  // }
 }
