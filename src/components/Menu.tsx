@@ -1,36 +1,34 @@
-// var React = require("react/addons");
-import React, { ReactElement } from "react";
+import React, { ReactElement, ReactNode } from "react";
 import { cloneElement } from "react";
-// var cloneWithProps = React.addons.cloneWithProps;
 
 type Props = {
   isMenuBarDescendant?: any;
   menuBarEvents?: any;
   onSelect?: any;
+  children: ReactNode;
 };
-export default class Menu extends React.Component<Props, any> {
+
+export default function Menu(props: Props) {
   // propTypes: {
   //   isMenuBarDescendant: React.PropTypes.func.isRequired,
   //   menuBarEvents: React.PropTypes.object.isRequired,
   //   onSelect: React.PropTypes.func.isRequired
   // },
-  constructor(props: any) {
-    super(props);
-  }
+  // constructor(props: any) {
+  //   super(props);
+  // }
 
-  renderChild = (child: React.ReactNode) => {
+  const renderChild = (child: React.ReactNode) => {
     return cloneElement(child as ReactElement, {
-      isMenuBarDescendant: this.props.isMenuBarDescendant,
-      menuBarEvents: this.props.menuBarEvents,
-      onSelect: this.props.onSelect
+      isMenuBarDescendant: props.isMenuBarDescendant,
+      menuBarEvents: props.menuBarEvents,
+      onSelect: props.onSelect
     });
   };
 
-  render() {
-    return (
-      <div className="dropdown-menu" role="menu">
-        {React.Children.map(this.props.children, this.renderChild)}
-      </div>
-    );
-  }
+  return (
+    <div className="dropdown-menu" role="menu">
+      {React.Children.map(props.children, renderChild)}
+    </div>
+  );
 }
