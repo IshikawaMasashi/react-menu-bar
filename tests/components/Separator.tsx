@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 
-import { Separator } from "../../src/components/Separator";
+import { Separator } from "../../src";
 import { styles } from "../../src/utils/styles";
 
 describe("Separator", () => {

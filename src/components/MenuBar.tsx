@@ -80,7 +80,7 @@ export default function MenuBar(props: Props) {
   // render() {
   return (
     <div
-      className="menu-bar nav navbar-nav"
+      className="menu-bar"
       onClick={onClick}
       onMouseOver={onMouseOver}
       ref={elementRef}

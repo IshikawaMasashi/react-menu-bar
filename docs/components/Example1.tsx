@@ -1,8 +1,5 @@
 import React from "react";
-import MenuBar from "../../src/components/MenuBar";
-import MenuItem from "../../src/components/MenuItem";
-import Menu from "../../src/components/Menu";
-import Separator from "../../src/components/Separator";
+import { MenuBar, MenuItem, Menu, Separator } from "../../src";
 
 function onSelect(command: string) {
   console.log("Selected command: %s", command);

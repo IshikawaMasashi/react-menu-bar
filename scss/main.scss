@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 //ContextMenu,Separator,Item------------------------------------------ //
-@import 'menu';
+@import "menu";
 
 //Themes ------------------------------------------------------------ //
 @import "themes/dark";
@@ -12,3 +12,8 @@
 @import "animations/zoom";
 @import "animations/fade";
 @import "animations/flip";
+
+//Components -------------------------------------------------------- //
+@import "components/separator";
+@import "components/menu";
+@import "components/menubar";

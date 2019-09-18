@@ -1,5 +1,5 @@
 {
-  "name": "@ishikawa_masashi/react-contexify",
+  "name": "@ishikawa_masashi/react-menu-bar",
   "version": "1.0.5",
   "main": "lib/index.js",
   "typings": "./lib/index.d.ts",

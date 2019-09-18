@@ -1,0 +1,11 @@
+.dropdown-menu {
+  list-style: none;
+  position: absolute;
+  display: none;
+  white-space: nowrap;
+  background-color: #252526;
+  box-shadow: rgb(0, 0, 0) 0px 2px 4px;
+  padding: 6.5px 0;
+  cursor: default;
+  user-select: none;
+}
