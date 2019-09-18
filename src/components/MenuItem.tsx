@@ -1,6 +1,7 @@
 import React, { ReactElement, ReactNode } from "react";
 
 import { cloneElement, useRef, useState, useEffect } from "react";
+import usePrevious from "../hooks/usePrevious";
 
 type Props = {
   isMenuBarActive?: boolean;
@@ -23,6 +24,7 @@ export default function MenuItem(props: Props) {
   const elementRef = useRef<HTMLDivElement>(null);
 
   const [open, setOpen] = useState(false);
+  const prevOpen = usePrevious(open);
   // constructor(props: any) {
   //   super(props);
 
@@ -40,12 +42,12 @@ export default function MenuItem(props: Props) {
     return () => {
       unbindCloseHandlers();
     };
-  }, []);
+  });
 
   useEffect(() => {
-    if (open) {
+    if (open && !prevOpen) {
       bindCloseHandlers();
-    } else if (!open) {
+    } else if (!open && prevOpen) {
       unbindCloseHandlers();
     }
   }, [open]);
@@ -109,7 +111,7 @@ export default function MenuItem(props: Props) {
     }
   };
 
-  const onMouseOut = (e: any) => {
+  const onMouseOut = (e: React.MouseEvent) => {
     if (
       hasSubmenu() &&
       props.isMenuBarDescendant(e.relatedTarget) &&
@@ -131,11 +133,11 @@ export default function MenuItem(props: Props) {
   };
 
   const unbindCloseHandlers = () => {
-    document.removeEventListener("click", onDocumentClick);
+    document.removeEventListener("click", onDocumentClick, false);
     props.menuBarEvents.removeMouseOverListener(onMenuBarMouseOver);
   };
 
-  const onDocumentClick = (e: any) => {
+  const onDocumentClick = (e: MouseEvent) => {
     if (!isChildElement(e.target)) {
       // setState({ open: false });
       setOpen(false);

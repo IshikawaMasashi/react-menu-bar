@@ -1,26 +1,39 @@
 // var React = require("react/addons");
-import React, { ReactElement } from "react";
-import { cloneElement } from "react";
+import React from "react";
+import {
+  cloneElement,
+  ReactElement,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import MenuBarEvents from "./MenuBarEvents";
+import usePrevious from "../hooks/usePrevious";
 
 // var MenuBarEvents = require("./MenuBarEvents");
 // var cloneWithProps = React.addons.cloneWithProps;
 
-type Props = { onSelect: (command: string) => void };
-type State = { events?: MenuBarEvents; isActive: boolean };
-export default class MenuBar extends React.Component<Props, State> {
-  element: HTMLElement | null = null;
+type Props = { onSelect: (command: string) => void; children: ReactNode };
+// type State = { events?: MenuBarEvents; isActive: boolean };
+
+export default function MenuBar(props: Props) {
+  const elementRef = useRef<HTMLDivElement>(null);
+  const [isActive, setIsActive] = useState(false);
+  const prevIsActive = usePrevious(isActive);
+  const [events] = useState(new MenuBarEvents());
   // propTypes: {
   //   onSelect: React.PropTypes.func.isRequired
   // },
 
-  constructor(props: Props) {
-    super(props);
+  // constructor(props: Props) {
+  //   super(props);
 
-    this.state = {
-      isActive: false
-    };
-  }
+  //   this.state = {
+  //     isActive: false
+  //   };
+  // }
 
   // getInitialState = () => {
   //   return {
@@ -28,68 +41,70 @@ export default class MenuBar extends React.Component<Props, State> {
   //   };
   // };
 
-  componentWillMount() {
-    this.setState({
-      events: new MenuBarEvents()
-    });
-  }
+  useEffect(() => {
+    return () => {};
+  }, []);
 
-  componentDidUpdate(prevProps: any, prevState: any) {
-    if (this.state.isActive && !prevState.isActive) {
-      this.bindSetInactiveHandler();
-    } else if (prevState.isActive && !this.state.isActive) {
-      this.unbindSetInactiveHandler();
+  useEffect(() => {
+    if (isActive && !prevIsActive) {
+      bindSetInactiveHandler();
+    } else if (prevIsActive && !isActive) {
+      unbindSetInactiveHandler();
     }
-  }
+    return () => {};
+  }, [isActive]);
 
-  renderMenuItem = (child: ReactElement) => {
+  const renderMenuItem = (child: ReactElement) => {
     return cloneElement(child, {
-      isMenuBarActive: this.state.isActive,
-      isMenuBarDescendant: this.isMenuBarDescendant,
+      isMenuBarActive: isActive,
+      isMenuBarDescendant: isMenuBarDescendant,
       isTopLevel: true,
-      menuBarEvents: this.state.events,
-      onSelect: this.props.onSelect
+      menuBarEvents: events,
+      onSelect: props.onSelect
     });
   };
 
-  isMenuBarDescendant = (element: any) => {
+  const isMenuBarDescendant = (element: HTMLElement) => {
     // return this.getDOMNode().contains(element);
-    return this.element!.contains(element);
+    return elementRef.current!.contains(element);
   };
 
-  bindSetInactiveHandler = () => {
-    document.addEventListener("click", this.handleDocumentClick, false);
+  // const handleDocumentClick = (e: any) => {
+  //   // this.setState({ isActive: false });
+  //   setIsActive(false);
+  // };
+
+  const handleDocumentClick = useCallback(() => {
+    setIsActive(false);
+  }, [setIsActive]);
+
+  const bindSetInactiveHandler = () => {
+    document.addEventListener("click", handleDocumentClick);
   };
 
-  unbindSetInactiveHandler = () => {
-    document.removeEventListener("click", this.handleDocumentClick);
+  const unbindSetInactiveHandler = () => {
+    document.removeEventListener("click", handleDocumentClick, false);
   };
 
-  handleDocumentClick = (e: any) => {
-    this.setState({ isActive: false });
+  const onClick = (e: React.MouseEvent) => {
+    // this.setState({ isActive: !this.state.isActive });
+    setIsActive(!isActive);
   };
 
-  onClick = (e: any) => {
-    this.setState({ isActive: !this.state.isActive });
+  const onMouseOver = (e: React.MouseEvent) => {
+    events.emitMouseOver(e);
   };
 
-  onMouseOver = (e: React.MouseEvent) => {
-    this.state.events!.emitMouseOver(e);
-  };
-
-  render() {
-    return (
-      <ul
-        className="menu-bar nav navbar-nav"
-        onClick={this.onClick}
-        onMouseOver={this.onMouseOver}
-        ref={ref => (this.element = ref)}
-      >
-        {React.Children.map(
-          this.props.children as ReactElement,
-          this.renderMenuItem
-        )}
-      </ul>
-    );
-  }
+  // render() {
+  return (
+    <div
+      className="menu-bar nav navbar-nav"
+      onClick={onClick}
+      onMouseOver={onMouseOver}
+      ref={elementRef}
+    >
+      {React.Children.map(props.children as ReactElement, renderMenuItem)}
+    </div>
+  );
+  // }
 }
