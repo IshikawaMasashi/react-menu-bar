@@ -138,17 +138,15 @@ export default class MenuItem extends React.Component<any, any> {
     }
 
     return (
-      <li
+      <div
         className={classes}
         onMouseOver={this.onMouseOver}
         onMouseOut={this.onMouseOut}
         ref={ref => (this.element = ref)}
       >
-        <a href="#" onClick={this.onClick}>
-          {this.getLabel()}
-        </a>
+        <div onClick={this.onClick}>{this.getLabel()}</div>
         {this.renderSubmenu()}
-      </li>
+      </div>
     );
   }
 }
