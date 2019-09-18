@@ -1,7 +1,5 @@
 import React, { ReactElement } from "react";
 import { cloneElement } from "react";
-// var classSet = React.addons.classSet;
-// var cloneWithProps = React.addons.cloneWithProps;
 
 export default class MenuItem extends React.Component<any, any> {
   //   propTypes: {
@@ -38,44 +36,15 @@ export default class MenuItem extends React.Component<any, any> {
     this.unbindCloseHandlers();
   }
 
-  render() {
-    // var classes = {
-    //   open: this.state.open,
-    //   "dropdown-submenu": !this.props.isTopLevel && this.hasSubmenu()
-    // };
-    let classes = "";
-    if (this.state.open) {
-      classes += " open";
-    }
-
-    if (!this.props.isTopLevel && this.hasSubmenu()) {
-      classes += " dropdown-submenu";
-    }
-
-    return (
-      <li
-        className={classes}
-        onMouseOver={this.onMouseOver}
-        onMouseOut={this.onMouseOut}
-        ref={ref => (this.element = ref)}
-      >
-        <a href="#" onClick={this.onClick}>
-          {this.getLabel()}
-        </a>
-        {this.renderSubmenu()}
-      </li>
-    );
-  }
-
-  getLabel() {
+  getLabel = () => {
     return this.hasSubmenu() ? this.props.label : this.props.children;
-  }
+  };
 
-  hasSubmenu() {
+  hasSubmenu = () => {
     return React.isValidElement(this.props.children);
-  }
+  };
 
-  renderSubmenu() {
+  renderSubmenu = () => {
     if (!this.hasSubmenu()) return;
 
     var menu = this.props.children as ReactElement;
@@ -85,7 +54,7 @@ export default class MenuItem extends React.Component<any, any> {
       menuBarEvents: this.props.menuBarEvents,
       onSelect: this.onSelect
     });
-  }
+  };
 
   onSelect = (key: any) => {
     this.props.onSelect(key);
@@ -122,25 +91,25 @@ export default class MenuItem extends React.Component<any, any> {
     }
   };
 
-  toggleOpen() {
+  toggleOpen = () => {
     this.setState({ open: !this.state.open });
-  }
+  };
 
-  bindCloseHandlers() {
+  bindCloseHandlers = () => {
     document.addEventListener("click", this.onDocumentClick, false);
     this.props.menuBarEvents.addMouseOverListener(this.onMenuBarMouseOver);
-  }
+  };
 
-  unbindCloseHandlers() {
+  unbindCloseHandlers = () => {
     document.removeEventListener("click", this.onDocumentClick);
     this.props.menuBarEvents.removeMouseOverListener(this.onMenuBarMouseOver);
-  }
+  };
 
-  onDocumentClick(e: any) {
+  onDocumentClick = (e: any) => {
     if (!this.isChildElement(e.target)) {
       this.setState({ open: false });
     }
-  }
+  };
 
   onMenuBarMouseOver = (e: React.MouseEvent) => {
     e.persist();
@@ -149,8 +118,37 @@ export default class MenuItem extends React.Component<any, any> {
     }
   };
 
-  isChildElement(element: any) {
+  isChildElement = (element: any) => {
     // return this.getDOMNode().contains(element);
     return this.element!.contains(element);
+  };
+
+  render() {
+    // var classes = {
+    //   open: this.state.open,
+    //   "dropdown-submenu": !this.props.isTopLevel && this.hasSubmenu()
+    // };
+    let classes = "";
+    if (this.state.open) {
+      classes += " open";
+    }
+
+    if (!this.props.isTopLevel && this.hasSubmenu()) {
+      classes += " dropdown-submenu";
+    }
+
+    return (
+      <li
+        className={classes}
+        onMouseOver={this.onMouseOver}
+        onMouseOut={this.onMouseOut}
+        ref={ref => (this.element = ref)}
+      >
+        <a href="#" onClick={this.onClick}>
+          {this.getLabel()}
+        </a>
+        {this.renderSubmenu()}
+      </li>
+    );
   }
 }
