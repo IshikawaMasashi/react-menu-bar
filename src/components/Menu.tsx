@@ -3,7 +3,12 @@ import React, { ReactElement } from "react";
 import { cloneElement } from "react";
 // var cloneWithProps = React.addons.cloneWithProps;
 
-export default class Menu extends React.Component<any, any> {
+type Props = {
+  isMenuBarDescendant: any;
+  menuBarEvents: any;
+  onSelect: any;
+};
+export default class Menu extends React.Component<Props, any> {
   // propTypes: {
   //   isMenuBarDescendant: React.PropTypes.func.isRequired,
   //   menuBarEvents: React.PropTypes.object.isRequired,
@@ -11,13 +16,6 @@ export default class Menu extends React.Component<any, any> {
   // },
   constructor(props: any) {
     super(props);
-  }
-  render() {
-    return (
-      <ul className="dropdown-menu" role="menu">
-        {React.Children.map(this.props.children, this.renderChild)}
-      </ul>
-    );
   }
 
   renderChild = (child: React.ReactNode) => {
@@ -27,4 +25,12 @@ export default class Menu extends React.Component<any, any> {
       onSelect: this.props.onSelect
     });
   };
+
+  render() {
+    return (
+      <div className="dropdown-menu" role="menu">
+        {React.Children.map(this.props.children, this.renderChild)}
+      </div>
+    );
+  }
 }

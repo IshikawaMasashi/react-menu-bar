@@ -144,7 +144,12 @@ export default class MenuItem extends React.Component<any, any> {
         onMouseOut={this.onMouseOut}
         ref={ref => (this.element = ref)}
       >
-        <div onClick={this.onClick}>{this.getLabel()}</div>
+        <div
+          className={this.hasSubmenu() ? "submenu-label" : "menu-item-label"}
+          onClick={this.onClick}
+        >
+          {this.getLabel()}
+        </div>
         {this.renderSubmenu()}
       </div>
     );

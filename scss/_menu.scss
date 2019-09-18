@@ -116,6 +116,21 @@
   border-left-color: #ffffff;
 }
 
+.label > .dropdown-menu {
+  padding: 40px;
+}
+
+.open {
+  border: 1px solid red;
+}
+
+.submenu-label:hover {
+  background-color: blue;
+}
+
+.menu-item-label:hover {
+  background-color: blue;
+}
 // .dropdown-submenu.pull-left {
 //   float: none;
 // }

@@ -42,8 +42,6 @@ export default class MenuBar extends React.Component<Props, State> {
     }
   }
 
-
-
   renderMenuItem = (child: ReactElement) => {
     return cloneElement(child, {
       isMenuBarActive: this.state.isActive,
@@ -59,17 +57,17 @@ export default class MenuBar extends React.Component<Props, State> {
     return this.element!.contains(element);
   };
 
-  bindSetInactiveHandler() {
+  bindSetInactiveHandler = () => {
     document.addEventListener("click", this.handleDocumentClick, false);
-  }
+  };
 
-  unbindSetInactiveHandler() {
+  unbindSetInactiveHandler = () => {
     document.removeEventListener("click", this.handleDocumentClick);
-  }
+  };
 
-  handleDocumentClick(e: any) {
+  handleDocumentClick = (e: any) => {
     this.setState({ isActive: false });
-  }
+  };
 
   onClick = (e: any) => {
     this.setState({ isActive: !this.state.isActive });

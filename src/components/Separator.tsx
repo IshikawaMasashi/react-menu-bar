@@ -1,7 +1,7 @@
 import * as React from "react";
 
 function Separator() {
-  return <li className="divider"></li>;
+  return <div className="divider"></div>;
 }
 
 export default Separator;
