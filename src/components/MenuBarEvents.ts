@@ -5,10 +5,9 @@ import EventEmitter from "../utils/EventEmitter";
 export default class MenuBarEvents {
   eventEmitter = new EventEmitter();
   constructor() {
-    var eventEmitter = new EventEmitter();
+    // var eventEmitter = new EventEmitter();
     // eventEmitter.setMaxListeners(Infinity);
-
-    this.eventEmitter = eventEmitter;
+    // this.eventEmitter = eventEmitter;
   }
 
   addMouseOverListener(listener: any) {
@@ -20,7 +19,7 @@ export default class MenuBarEvents {
     this.eventEmitter.off("mouseover", listener);
   }
 
-  emitMouseOver(event: any) {
+  emitMouseOver(event: React.MouseEvent) {
     this.eventEmitter.emit("mouseover", event);
   }
 }

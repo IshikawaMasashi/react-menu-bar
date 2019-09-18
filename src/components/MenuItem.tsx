@@ -59,10 +59,9 @@ export default class MenuItem extends React.Component<any, any> {
         onMouseOut={this.onMouseOut}
         ref={ref => (this.element = ref)}
       >
-        <a href="#" onClick={this.onClick} style={{ width: "60px" }}>
+        <a href="#" onClick={this.onClick}>
           {this.getLabel()}
         </a>
-
         {this.renderSubmenu()}
       </li>
     );
@@ -143,7 +142,8 @@ export default class MenuItem extends React.Component<any, any> {
     }
   }
 
-  onMenuBarMouseOver = (e: any) => {
+  onMenuBarMouseOver = (e: React.MouseEvent) => {
+    e.persist();
     if (!this.isChildElement(e.target)) {
       this.setState({ open: false });
     }

@@ -6,16 +6,15 @@ import MenuBarEvents from "./MenuBarEvents";
 // var MenuBarEvents = require("./MenuBarEvents");
 // var cloneWithProps = React.addons.cloneWithProps;
 
-export default class MenuBar extends React.Component<
-  any,
-  { events?: any; isActive: boolean }
-> {
+type Props = { onSelect: (command: string) => void };
+type State = { events?: MenuBarEvents; isActive: boolean };
+export default class MenuBar extends React.Component<Props, State> {
   element: HTMLElement | null = null;
   // propTypes: {
   //   onSelect: React.PropTypes.func.isRequired
   // },
 
-  constructor(props: any) {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -43,21 +42,7 @@ export default class MenuBar extends React.Component<
     }
   }
 
-  render() {
-    return (
-      <ul
-        className="menu-bar nav navbar-nav"
-        onClick={this.onClick}
-        onMouseOver={this.onMouseOver}
-        ref={ref => (this.element = ref)}
-      >
-        {React.Children.map(
-          this.props.children as ReactElement,
-          this.renderMenuItem
-        )}
-      </ul>
-    );
-  }
+
 
   renderMenuItem = (child: ReactElement) => {
     return cloneElement(child, {
@@ -90,7 +75,23 @@ export default class MenuBar extends React.Component<
     this.setState({ isActive: !this.state.isActive });
   };
 
-  onMouseOver = (e: any) => {
-    this.state.events.emitMouseOver(e);
+  onMouseOver = (e: React.MouseEvent) => {
+    this.state.events!.emitMouseOver(e);
   };
+
+  render() {
+    return (
+      <ul
+        className="menu-bar nav navbar-nav"
+        onClick={this.onClick}
+        onMouseOver={this.onMouseOver}
+        ref={ref => (this.element = ref)}
+      >
+        {React.Children.map(
+          this.props.children as ReactElement,
+          this.renderMenuItem
+        )}
+      </ul>
+    );
+  }
 }

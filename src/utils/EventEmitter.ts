@@ -3,7 +3,9 @@ const DEFAULT_VALUES = {
   strictMode: false
 };
 
-type EventEmitterListenerFunc = {};
+type EventEmitterListenerFunc = {
+  (): void;
+};
 
 /**
  * @typedef {object} EventEmitterListenerFunc
@@ -19,7 +21,7 @@ type EventEmitterListenerFunc = {};
  * @property {string[]} events
  */
 export default class EventEmitter {
-  _emitDelay: number;
+  _emitDelay: number = 0;
   _strictMode: boolean;
   _listeners: any = {};
   events: any[] = [];
@@ -30,14 +32,15 @@ export default class EventEmitter {
    * @param {boolean} [opts.strictMode = false] - is true, Emitter throws error on emit error with no listeners
    */
   constructor(opts = DEFAULT_VALUES) {
-    let emitDelay, strictMode;
+    // let emitDelay;
+    let strictMode;
 
-    if (opts.hasOwnProperty("emitDelay")) {
-      emitDelay = opts.emitDelay;
-    } else {
-      emitDelay = DEFAULT_VALUES.emitDelay;
-    }
-    this._emitDelay = emitDelay;
+    // if (opts.hasOwnProperty("emitDelay")) {
+    //   emitDelay = opts.emitDelay;
+    // } else {
+    //   emitDelay = DEFAULT_VALUES.emitDelay;
+    // }
+    // this._emitDelay = emitDelay;
 
     if (opts.hasOwnProperty("strictMode")) {
       strictMode = opts.strictMode;
@@ -56,7 +59,11 @@ export default class EventEmitter {
    * @param {function} listener
    * @param {boolean} [once = false]
    */
-  _addListenner(type: string, listener: () => void, once = false) {
+  _addListenner(
+    type: string,
+    listener: EventEmitterListenerFunc,
+    once = false
+  ) {
     if (typeof listener !== "function") {
       throw TypeError("listener must be a function");
     }
